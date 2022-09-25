@@ -27,8 +27,13 @@ def flip_image(x):
 
 if __name__ == "__main__":
 
-    with gr.Blocks() as demo:
-        gr.Markdown("Chaning emotion or <other-face2face>")
+    title = "MEME Manipulation Tool"
+    description = "MEME Manipulation Tool is an app..."
+    article = "example article"
+    examples=[["example1"]]
+
+    with gr.Blocks(title=title) as demo:
+        gr.Markdown("Chaning emotion or other-face2face")
         with gr.Tab("Change emotion"):
             emtion_image_input = gr.Image()
             emotion_text_input = gr.Dropdown(["happy", "fear", "sad", "angry", "disgust", "surprise", "neutral"])
