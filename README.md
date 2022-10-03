@@ -16,7 +16,8 @@ Check out the configuration reference at https://huggingface.co/docs/hub/spaces-
 ## Instructions
 
 1. run `pip install -r requirements.txt`
-2. run `python app.py`
+2. If you want to deploy publicy, update the code in `app.py` to `demo.launch(share=True)`.
+3. run `python app.py`
 ## UI
 
 ![UI](UI.png "UI")
