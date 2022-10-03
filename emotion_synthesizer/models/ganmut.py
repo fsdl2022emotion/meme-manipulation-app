@@ -36,7 +36,7 @@ class GANmut:
         self.G.to(self.device)
         self.detector = dlib.get_frontal_face_detector()
 
-    def emotion_edit(self, img_path, x=None, y=None, theta=None, rho=None, save=False):
+    def emotion_edit(self, img, x=None, y=None, theta=None, rho=None, save=False):
 
         if self.model == "linear":
             assert (rho is not None) or (
@@ -47,10 +47,11 @@ class GANmut:
                 y is not None
             ), "if model is gaussian you must provide x and y"
 
-        img = cv2.imread(img_path, 1)  # BGR
-        img_rgb = img[:, :, [2, 1, 0]]
-        plt.title('Original Image')
-        plt.imshow(img_rgb)
+        # img = cv2.imread(img_path, 1)  # BGR
+        # img_rgb = img[:, :, [2, 1, 0]]
+        img_rgb = img
+        # plt.title('Original Image')
+        # plt.imshow(img_rgb)
 
         # extract face
         det = self.detector(img, 1)[0]
@@ -58,7 +59,8 @@ class GANmut:
         face = cv2.resize(img[yy : yy + h, xx : xx + w], (128, 128))
 
         # save this format for histogram matching
-        face_hwc = face[:,:,[2,1,0]]
+        # face_hwc = face[:,:,[2,1,0]]
+        face_hwc = face
 
         # adapt image format for G
         face = face.transpose((2, 0, 1))  # [H,W,C] --> [C,H,W]
@@ -67,6 +69,7 @@ class GANmut:
 
         # edit emotion
 
+        print("Editing emotion...")
         with torch.no_grad():
 
             if self.model == "linear":
@@ -88,47 +91,54 @@ class GANmut:
                 face_g = self.G(face, expr)[0][0, [2, 1, 0], :, :] / 2 + 0.5
 
         face_g = face_g.transpose(0, 2).transpose(0, 1).detach().cpu().numpy()
-        plt.figure()
-        plt.title("generated")
-        plt.imshow(face_g)
+        
+
+        # plt.figure()
+        # plt.title("generated")
+        # plt.imshow(face_g)
 
         # histogram matching
+        print("Matching histograms...")
         face_g_sk = img_as_float(face_g)
         img_rgb_sk = img_as_float(face_hwc)
         multi = True if face_g.shape[-1] > 1 else False
         matched = exposure.match_histograms(face_g_sk, img_rgb_sk, multichannel=multi)
         matched_resized = resize(matched, (h, w))
-        plt.figure()
-        plt.title("matched_resized")
-        plt.imshow(matched_resized)
+        # plt.figure()
+        # plt.title("matched_resized")
+        # plt.imshow(matched_resized)
 
         img_rgb[yy : yy + h, xx : xx + w] = matched_resized *255
-        plt.figure()
-        plt.title("Edited image")
-        plt.imshow(img_rgb)
+        # plt.figure()
+        # plt.title("Edited image")
+        # plt.imshow(img_rgb)
 
         if save:
-            save_dir = "../edited_images"
-            if self.model == "linear":
-                save_dir = "../edited_images_linear"
-            Path(save_dir).mkdir(parents=True, exist_ok=True)
-            if self.model == "linear":
-                img_name = (
-                    "theta_{:0.2f}_rho_{:0.2f}".format(theta, rho)
-                    + os.path.split(img_path)[-1]
-                )
-            else:
-                img_name = (
-                    "x_{:0.2f}_y_{:0.2f}".format(x, y) + os.path.split(img_path)[-1]
-                )
+            # TODO: implement 
+            pass
+            # save_dir = "../edited_images"
+            # if self.model == "linear":
+            #     save_dir = "../edited_images_linear"
+            # Path(save_dir).mkdir(parents=True, exist_ok=True)
+            # if self.model == "linear":
+            #     img_name = (
+            #         "theta_{:0.2f}_rho_{:0.2f}".format(theta, rho)
+            #         + os.path.split(img_path)[-1]
+            #     )
+            # else:
+            #     img_name = (
+            #         "x_{:0.2f}_y_{:0.2f}".format(x, y) + os.path.split(img_path)[-1]
+            #     )
 
-            img_name = os.path.join(save_dir, img_name)
-            plt.imsave(img_name, img_rgb)
-            print(f"edited image saved in {img_name}")
+            # img_name = os.path.join(save_dir, img_name)
+            # # plt.imsave(img_name, img_rgb)
+            # print(f"edited image saved in {img_name}")
+        
+        return img_rgb
 
 
     def emotion_edit_original(self, img_path, x=None, y=None, theta=None, rho=None, save=False):
-
+        # TODO: change img_path to img
         if self.model == 'linear':
             assert (rho is not None) or (theta is not None), 'if model is linear you must provide rho and theta'
         else:
@@ -136,17 +146,17 @@ class GANmut:
 
         img = cv2.imread(img_path, 1)  # BGR
         img_rgb = img[:, :, [2, 1, 0]]
-        plt.title('Original Image')
-        plt.imshow(img_rgb)
+        # plt.title('Original Image')
+        # plt.imshow(img_rgb)
 
         # extract face
         det = self.detector(img, 1)[0]
         (xx, yy, w, h) = rect_to_bb(det)
         face = cv2.resize(img[yy:yy + h, xx:xx + w], (128, 128))
 
-        plt.figure()
-        plt.title('Detected face')
-        plt.imshow(face[:, :, [2, 1, 0]])
+        # plt.figure()
+        # plt.title('Detected face')
+        # plt.imshow(face[:, :, [2, 1, 0]])
 
         # adapt image format for G
         face = face.transpose((2, 0, 1))  # [H,W,C] --> [C,H,W]
@@ -167,16 +177,16 @@ class GANmut:
 
         face_g = face_g.transpose(0, 2).transpose(0, 1).detach().cpu().numpy()
 
-        plt.figure()
-        plt.title('Edited face')
-        plt.imshow(face_g)
+        # plt.figure()
+        # plt.title('Edited face')
+        # plt.imshow(face_g)
 
         # insert edited face in original image
         img_rgb[yy:yy + h, xx:xx + w] = cv2.resize(face_g, (w, h)) * 255
 
-        plt.figure()
-        plt.title('Edited image')
-        plt.imshow(img_rgb)
+        # plt.figure()
+        # plt.title('Edited image')
+        # plt.imshow(img_rgb)
 
         if save:
             save_dir = "../edited_images"
@@ -187,5 +197,5 @@ class GANmut:
                 img_name = 'x_{:0.2f}_y_{:0.2f}'.format(x, y) + os.path.split(img_path)[-1]
 
             img_name = os.path.join(save_dir, img_name)
-            plt.imsave(img_name, img_rgb)
+            # plt.imsave(img_name, img_rgb)
             print(f'edited image saved in {img_name}')
