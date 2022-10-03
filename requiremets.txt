@@ -1,0 +1,10 @@
+cmake
+dlib
+matplotlib
+numpy
+tqdm
+opencv-python
+tensorflow
+torch
+scikit-image
+imutils

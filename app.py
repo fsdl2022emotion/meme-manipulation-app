@@ -4,11 +4,21 @@ import numpy as np
 from emotion_synthesizer.emotion_synthesis import EmotionSynthesizer
 
 
-def make_meme(original_image, new_emotion, text):
-    model = EmotionSynthesizer()
-    generated_image = model.predict(original_image, new_emotion)
-    output_image = add_text(generated_image, text)
-    return output_image
+DEFAULT_MODEL_PATH = "./emotion_synthesizer/learned_generators/gaus_2d/1800000-G.ckpt"
+DEFAULT_MODEL_TYPE = "gaussian"
+
+def make_meme(original_image, new_emotion, text=None):
+    model = EmotionSynthesizer(DEFAULT_MODEL_PATH, DEFAULT_MODEL_TYPE)
+    try:
+        generated_image = model.predict(original_image, new_emotion)
+    except:
+        raise gr.Error(f"Cannot generate emotion {new_emotion} from the input image.")
+    
+    if text:
+        output_image = add_text(generated_image, text)
+        return output_image
+
+    return generated_image
 
 def add_text(image, text):
     #TODO

@@ -12,8 +12,9 @@ class EmotionSynthesizer:
 
     def predict(self, original_image, primary_emotion, secondary_emotion=None, intensity=None):
         coordinates = self._get_coordinate(primary_emotion, secondary_emotion, intensity)
+        print(f"Coordinates: {coordinates}")
         generated_image = self.G.emotion_edit(
-            image=original_image, 
+            img=original_image, 
             x=coordinates[0], 
             y=coordinates[1], 
             save = False)
