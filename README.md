@@ -9,7 +9,6 @@ app_file: app.py
 pinned: false
 license: mit
 ---
-
 ## MEME Manipulation App
 
 Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
@@ -21,3 +20,4 @@ Check out the configuration reference at https://huggingface.co/docs/hub/spaces-
 ## UI
 
 ![UI](UI.png "UI")
+
