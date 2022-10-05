@@ -168,3 +168,4 @@ draft.ipynb
 .DS_Store
 .model_weights
 .debug.ipynb
+.add_text.ipynb

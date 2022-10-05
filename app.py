@@ -2,7 +2,7 @@ import gradio as gr
 import numpy as np
 
 from emotion_synthesizer.emotion_synthesis import EmotionSynthesizer
-
+from drawer.simple_draw import add_text
 
 DEFAULT_MODEL_PATH = "./emotion_synthesizer/learned_generators/gaus_2d/1800000-G.ckpt"
 DEFAULT_MODEL_TYPE = "gaussian"
@@ -20,9 +20,6 @@ def make_meme(original_image, new_emotion, text=None):
 
     return generated_image
 
-def add_text(image, text):
-    #TODO
-    return image
 
 def face_to_face(x):
     return x
