@@ -9,3 +9,4 @@ torch
 scikit-image
 imutils
 transformers
+gradio
