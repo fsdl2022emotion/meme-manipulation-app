@@ -167,3 +167,4 @@ example_app.py
 draft.ipynb
 .DS_Store
 .model_weights
+.debug.ipynb

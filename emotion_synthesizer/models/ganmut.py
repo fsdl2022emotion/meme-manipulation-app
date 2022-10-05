@@ -36,7 +36,7 @@ class GANmut:
         self.G.to(self.device)
         self.detector = dlib.get_frontal_face_detector()
 
-    def emotion_edit(self, img, x=None, y=None, theta=None, rho=None, save=False):
+    def emotion_edit(self, imgobj, x=None, y=None, theta=None, rho=None, save=False):
 
         if self.model == "linear":
             assert (rho is not None) or (
@@ -47,9 +47,17 @@ class GANmut:
                 y is not None
             ), "if model is gaussian you must provide x and y"
 
-        # img = cv2.imread(img_path, 1)  # BGR
-        # img_rgb = img[:, :, [2, 1, 0]]
-        img_rgb = img
+        from_path = False
+
+        if isinstance(imgobj, str):
+            img = cv2.imread(imgobj, 1)  # BGR
+            img_rgb = img[:, :, [2, 1, 0]]
+            from_path = True
+            # img_rgb = img
+        else:
+            img_rgb = imgobj
+            img = imgobj
+
         # plt.title('Original Image')
         # plt.imshow(img_rgb)
 
@@ -61,6 +69,7 @@ class GANmut:
         # save this format for histogram matching
         # face_hwc = face[:,:,[2,1,0]]
         face_hwc = face
+        face_hwc = face[:,:,[2,1,0]] if from_path else face
 
         # adapt image format for G
         face = face.transpose((2, 0, 1))  # [H,W,C] --> [C,H,W]
@@ -71,6 +80,7 @@ class GANmut:
 
         print("Editing emotion...")
         with torch.no_grad():
+            seq = [2, 1, 0] if from_path else [0, 1, 2]
 
             if self.model == "linear":
                 mode = "manual_selection"
@@ -81,14 +91,14 @@ class GANmut:
                 )
                 face_g = (
                     self.G(face, None, None, mode=mode, manual_expr=expr)[0][
-                        0, [2, 1, 0], :, :
+                        0, seq, :, :
                     ]
                     / 2
                     + 0.5
                 )
             else:
                 expr = torch.Tensor([x, y]).unsqueeze(0).to(self.device)
-                face_g = self.G(face, expr)[0][0, [2, 1, 0], :, :] / 2 + 0.5
+                face_g = self.G(face, expr)[0][0, seq, :, :] / 2 + 0.5
 
         face_g = face_g.transpose(0, 2).transpose(0, 1).detach().cpu().numpy()
         
@@ -102,7 +112,8 @@ class GANmut:
         face_g_sk = img_as_float(face_g)
         img_rgb_sk = img_as_float(face_hwc)
         multi = True if face_g.shape[-1] > 1 else False
-        matched = exposure.match_histograms(face_g_sk, img_rgb_sk, multichannel=multi)
+        channel_axis = 2 if multi else 0
+        matched = exposure.match_histograms(face_g_sk, img_rgb_sk, channel_axis=channel_axis)
         matched_resized = resize(matched, (h, w))
         # plt.figure()
         # plt.title("matched_resized")
