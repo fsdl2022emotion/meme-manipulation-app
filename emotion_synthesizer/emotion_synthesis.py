@@ -14,7 +14,7 @@ class EmotionSynthesizer:
         coordinates = self._get_coordinate(primary_emotion, secondary_emotion, intensity)
         print(f"Coordinates: {coordinates}")
         generated_image = self.G.emotion_edit(
-            img=original_image, 
+            imgobj=original_image, 
             x=coordinates[0], 
             y=coordinates[1], 
             save = False)
