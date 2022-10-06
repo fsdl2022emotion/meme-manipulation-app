@@ -1,30 +1,25 @@
 import cv2
 
 def add_text(image_rbg, text):
-    
-    org = (0, 950)
+    width = image_rbg.shape[1]
+    height = image_rbg.shape[0]
+
     fontFace = cv2.FONT_HERSHEY_SIMPLEX
-    fontScale = 5
     color = (255,255,255)
-    thickness = 10
+    thickness = 15
     lineType = cv2.LINE_AA
 
     # adjust according to text length
     if len(text) < 10:
         fontScale = 5
-        org = (200, 950)
+        org = (int(width/2 - 200), int(height/10*9 + 100))
     elif len(text) < 20:
         fontScale = 3
-        org = (100, 950)
-    elif len(text) < 30:
-        fontScale = 2
-        org = (5, 950)
-    elif len(text) < 40:
-        fontScale = 2
-        org = (5, 950)
+        org = (int(width/2 - 300), int(height/10*9 + 100))
     else:
         fontScale = 2
-        org = (5, 950)
+        org = (int(width/2 - 400), int(height/10*9 + 100))
+
 
     # covert to correct format for cv2.putText
     image_bgr = cv2.cvtColor(image_rbg, cv2.COLOR_RGB2BGR)
