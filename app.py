@@ -15,6 +15,7 @@ def make_meme(original_image, new_emotion, text=None):
         raise gr.Error(f"Cannot generate emotion {new_emotion} from the input image.")
     
     if text:
+        print(f"Adding text: {text}")
         output_image = add_text(generated_image, text)
         return output_image
 
