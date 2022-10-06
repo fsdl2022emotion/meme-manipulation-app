@@ -62,7 +62,19 @@ class GANmut:
         # plt.imshow(img_rgb)
 
         # extract face
-        det = self.detector(img, 1)[0]
+        
+        # update to handle iphone image issue
+        detected_faces = self.detector(img, 1)
+        if not detected_faces:
+            print("Rotating image 90 degrees for suspected iPhone image...")
+            from scipy.ndimage import rotate
+            img = rotate(img,-90)
+            img_rgb = rotate(img_rgb,-90)
+            det = self.detector(img, 1)[0]
+        else:
+            det = detected_faces[0]
+
+
         (xx, yy, w, h) = rect_to_bb(det)
         face = cv2.resize(img[yy : yy + h, xx : xx + w], (128, 128))
 
