@@ -169,3 +169,5 @@ draft.ipynb
 .model_weights
 .debug.ipynb
 .add_text.ipynb
+wandb/
+artifacts/
