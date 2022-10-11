@@ -7,8 +7,10 @@ import numpy as np
 from emotion_synthesizer.emotion_synthesis import EmotionSynthesizer
 from drawer.simple_draw import add_text
 
+
 DEFAULT_MODEL_PATH = "./emotion_synthesizer/learned_generators/gaus_2d/1800000-G.ckpt"
 DEFAULT_MODEL_TYPE = "gaussian"
+
 
 def make_meme(original_image, new_emotion, text=None, wandb_artifact=None):
     if wandb_artifact:
@@ -29,7 +31,6 @@ def make_meme(original_image, new_emotion, text=None, wandb_artifact=None):
         return output_image
 
     return generated_image
-
 
 def face_to_face(x):
     return x
@@ -56,20 +57,20 @@ if __name__ == "__main__":
         print(f"Using default model: {DEFAULT_MODEL_PATH}")
         meme_app = make_meme
 
-    # TODO
-    title = "MEME Manipulation Tool"
-    description = "MEME Manipulation Tool is an app..."
-    article = "example article"
-    examples=[["example1"]]
 
     with gr.Blocks(
-        title=title, 
+        title="MEME Manipulation Tool",
         css ="""
-            .gradio-container {background-image: url('file=wallpaper.jpg');background-repeat: no-repeat; background-size: contain;}
+            .gradio-container {background-image: url('file=wallpaper.png');background-repeat: no-repeat; background-size: cover;}
             """
         ) as demo:
-        with gr.Accordion("README"):
-            gr.Markdown("MEME Manipulation Tool")
+        with gr.Accordion("About"):
+            gr.Markdown("""
+            MEME Emotion Manipulation Tool is an open source project of the [Full Stack Deep Learning](https://fullstackdeeplearning.com) course.<br>
+            It is a tool that allows you to manipulate the emotions of a person in a photo. You can also add text to the photo. We will not save any input from the users. <br>
+            This tool used the pretrained model and is modified based on the [GANmut Model](https://github.com/stefanodapolito/GANmut). 
+            You can view the source code of this tool in [GitHub](https://github.com/fsdl2022emotion/meme-manipulation-app) and [Gradio Space](https://huggingface.co/spaces/fsdl2022emotion/meme-manipulation-gradio-space) and give it a star if you like it!<br>
+            """)
 
         with gr.Tab("Change emotion"):
             with gr.Row():
@@ -80,14 +81,23 @@ if __name__ == "__main__":
                     change_emotion_button = gr.Button("Change emotion")
                 with gr.Row(scale=1):
                     emotion_image_output = gr.Image()
-            
+        change_emotion_button.click(meme_app, inputs=[emtion_image_input, emotion_text_input, meme_text_input], outputs=emotion_image_output, )
+        
+        ############################# only show on demo day #############################
         with gr.Tab("original-image"):
             with gr.Row():
                 image_input = gr.Image()
                 image_output = gr.Image()
             image_button = gr.Button("Convert")
-
-        change_emotion_button.click(meme_app, inputs=[emtion_image_input, emotion_text_input, meme_text_input], outputs=emotion_image_output, )
         image_button.click(face_to_face, inputs=image_input, outputs=image_output)
+        ##################################################################################
 
-    demo.launch()
+        gr.Examples(examples=[
+            ["Charles Frye.jpeg", "sad", "I am sad"], 
+            ["Charles Frye.jpeg", "happy", "I am happy"]], 
+            inputs=[emtion_image_input, emotion_text_input, meme_text_input],
+            fn=meme_app,
+            )
+        
+
+    demo.launch(favicon_path="favicon.png")
