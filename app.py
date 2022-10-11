@@ -64,20 +64,24 @@ if __name__ == "__main__":
 
     with gr.Blocks(
         title=title, 
-        css=".gradio-container {background-image: url('file=wallpaper.jpg');background-repeat: no-repeat; background-size: contain;}"
+        css ="""
+            .gradio-container {background-image: url('file=wallpaper.jpg');background-repeat: no-repeat; background-size: contain;}
+            """
         ) as demo:
         with gr.Accordion("README"):
             gr.Markdown("MEME Manipulation Tool")
 
         with gr.Tab("Change emotion"):
-            emtion_image_input = gr.Image()
-            emotion_text_input = gr.Radio(["happy", "fear", "sad", "angry", "disgust", "surprise", "neutral"], label="Emotion")
-            meme_text_input = gr.Textbox(lines=1, label="Meme text")            
-            change_emotion_button = gr.Button("Change emotion")
-            emotion_image_output = gr.Image()
+            with gr.Row():
+                with gr.Column():
+                    emtion_image_input = gr.Image()
+                    emotion_text_input = gr.Radio(["happy", "fear", "sad", "angry", "disgust", "surprise", "neutral"], label="Emotion")
+                    meme_text_input = gr.Textbox(lines=1, label="Meme text")            
+                    change_emotion_button = gr.Button("Change emotion")
+                with gr.Row(scale=1):
+                    emotion_image_output = gr.Image()
             
-        with gr.Tab("<other face2face app>"):
-            #TODO
+        with gr.Tab("original-image"):
             with gr.Row():
                 image_input = gr.Image()
                 image_output = gr.Image()
