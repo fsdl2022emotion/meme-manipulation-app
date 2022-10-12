@@ -61,13 +61,13 @@ if __name__ == "__main__":
     with gr.Blocks(
         title="MEME Manipulation Tool",
         css ="""
-            .gradio-container {background-image: url('file=wallpaper.png');background-repeat: no-repeat; background-size: cover;}
+            .gradio-container {background-image: url('file=assets/wallpaper.png');background-repeat: no-repeat; background-size: cover;}
             """
         ) as demo:
         with gr.Accordion("About"):
             gr.Markdown("""
             MEME Emotion Manipulation Tool is an open source project of the [Full Stack Deep Learning](https://fullstackdeeplearning.com) course.<br>
-            It is a tool that allows you to manipulate the emotions of a person in a photo. You can also add text on the image. We will not save any input from the users. <br>
+            It is a tool that allows you to manipulate the emotions of a person in a photo. You can also add text on the image to create a meme. We will not save any input from the users. <br>
             This tool used the pretrained model and is modified based on the [GANmut Model](https://github.com/stefanodapolito/GANmut). 
             You can view the source code of this tool in [GitHub](https://github.com/fsdl2022emotion/meme-manipulation-app) and [Gradio Space](https://huggingface.co/spaces/fsdl2022emotion/meme-manipulation-gradio-space) and give it a star if you like it!<br>
             """)
@@ -93,9 +93,9 @@ if __name__ == "__main__":
         ##################################################################################
 
         gr.Examples(examples=[
-            ["Charles Frye.jpeg", "surprise", "When I got a new idea"], 
-            ["sergey.jpg", "neutral", "I did smile"],
-            ["josh.jpg", "angry", "nasdaq index"],
+            ["examples/Charles Frye.jpeg", "surprise", "When I got a new idea"], 
+            ["examples/sergey.jpg", "neutral", "I did smile"],
+            ["examples/josh.jpg", "angry", "nasdaq index"],
             ], 
             inputs=[emtion_image_input, emotion_text_input, meme_text_input],
             fn=meme_app,

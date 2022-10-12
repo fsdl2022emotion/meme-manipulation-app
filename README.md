@@ -11,8 +11,7 @@ license: mit
 ---
 ## MEME Manipulation App
 
-Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
-
+From Ganmut
 ## Instructions
 
 1. run `pip install -r requirements.txt`
@@ -20,5 +19,4 @@ Check out the configuration reference at https://huggingface.co/docs/hub/spaces-
 3. run `python app.py`
 ## UI
 
-![UI](UI.png "UI")
-
+<!-- ![UI](UI.png "UI") -->
