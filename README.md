@@ -17,6 +17,10 @@ From Ganmut
 1. run `pip install -r requirements.txt`
 2. If you want to deploy publicy, update the code in `app.py` to `demo.launch(share=True)`.
 3. run `python app.py`
-## UI
+## Examples
 
-<!-- ![UI](UI.png "UI") -->
+Original        |  Result
+:-------------------------:|:-------------------------:
+![charles original](./examples/charles-frye.jpeg){:.example}  |  ![charles generated](./examples/charles-generated.png){:.example}
+![sergey original](./examples/sergey.jpg){:.example}  |  ![sergey generated](./examples/sergey-generated.png){:.example}
+![josh original](./examples/josh.jpg){:.example}  |  ![josh generated](./examples/josh-generated.png){:.example}
