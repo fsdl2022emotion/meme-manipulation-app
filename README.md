@@ -21,6 +21,6 @@ From Ganmut
 
 Original        |  Result
 :-------------------------:|:-------------------------:
-![charles original](./examples/charles-frye.jpeg){:.example}  |  ![charles generated](./examples/charles-generated.png){:.example}
-![sergey original](./examples/sergey.jpg){:.example}  |  ![sergey generated](./examples/sergey-generated.png){:.example}
-![josh original](./examples/josh.jpg){:.example}  |  ![josh generated](./examples/josh-generated.png){:.example}
+![charles original](./examples/charles-frye.jpeg){.example}  |  ![charles generated](./examples/charles-generated.png){.example}
+![sergey original](./examples/sergey.jpg){.example}  |  ![sergey generated](./examples/sergey-generated.png){.example}
+![josh original](./examples/josh.jpg){.example}  |  ![josh generated](./examples/josh-generated.png){.example}
