@@ -1,3 +1,15 @@
+---
+title: Meme Manipulation Gradio Space
+emoji: 🏃
+colorFrom: indigo
+colorTo: green
+sdk: gradio
+sdk_version: 3.4
+app_file: app.py
+pinned: false
+license: mit
+---
+
 # MEME Emotion Manipulation Tool
 
 MEME Emotion Manipulation Tool is an app that allows you to manipulate the emotions of a person in a photo. You can also add text on the image to create a meme. 
