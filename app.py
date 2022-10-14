@@ -75,12 +75,6 @@ if __name__ == "__main__":
             This tool used the pretrained model and is modified based on the [GANmut Model](https://github.com/stefanodapolito/GANmut). 
             You can view the source code of this tool in [GitHub](https://github.com/fsdl2022emotion/meme-manipulation-app) and [Gradio Space](https://huggingface.co/spaces/fsdl2022emotion/meme-manipulation-gradio-space) and give it a star if you like it!<br>
             """)
-        with gr.Accordion("Valid Mapping"):
-            gr.Markdown("""
-            You can use purely the primary emotion or combine it with the secondary emotion for image generation. <br>
-            Yet only some of the combinations are valid. Please refer to the below mapping: <br>
-            ![valid mapping](https://i.ibb.co/5rCXgfB/Screenshot-2022-10-14-at-11-59-28-AM.png)
-            """)
         with gr.Tab("Change emotion"):
             with gr.Row():
                 with gr.Column():
@@ -102,13 +96,18 @@ if __name__ == "__main__":
             image_button = gr.Button("Convert")
         image_button.click(face_to_face, inputs=image_input, outputs=image_output)
         ##################################################################################
-
+        with gr.Accordion("Valid Mapping"):
+            gr.Markdown("""
+            You can use purely the primary emotion or combine it with the secondary emotion for image generation. <br>
+            Yet only some of the combinations are valid. Please refer to the below mapping: <br>
+            ![valid mapping](https://i.ibb.co/5rCXgfB/Screenshot-2022-10-14-at-11-59-28-AM.png)
+            """)
         gr.Examples(examples=[
-            ["examples/charles-frye.jpeg", "surprise", "When I got a new idea"], 
-            ["examples/sergey.jpg", "neutral", "I did smile"],
-            ["examples/josh.jpg", "angry", "nasdaq index"],
+            ["examples/charles-frye.jpeg", "surprise", "", 1.0, "When I got a new idea"], 
+            ["examples/sergey.jpg", "neutral", "", 1.0,  "I did smile"],
+            ["examples/josh.jpg", "angry", "", 1.0,  "nasdaq index"],
             ], 
-            inputs=[emtion_image_input, emotion_text_input, meme_text_input],
+            inputs=[emtion_image_input, emotion_text_input, emotion_text_input2, intensity, meme_text_input],
             fn=meme_app,
             )
         
