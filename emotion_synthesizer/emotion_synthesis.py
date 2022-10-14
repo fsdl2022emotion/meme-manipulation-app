@@ -28,7 +28,8 @@ class EmotionSynthesizer:
             return primary_coordinate
         if secondary_emotion not in self.neighbors:
             raise ValueError("Secondary emotion must be one of {}".format(self.neighbors.keys()))
-        secondary_coordinate = self.neighbors[secondary_emotion]
+        secondary_coordinate = self.neighbors[primary_emotion][secondary_emotion]
+        print(secondary_coordinate)
         x_dist = abs((primary_coordinate[0] - secondary_coordinate[0]) * intensity)
         y_dist = abs((primary_coordinate[1] - secondary_coordinate[1]) * intensity)
         x_dist = round(x_dist, 2)

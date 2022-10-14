@@ -12,7 +12,11 @@ DEFAULT_MODEL_PATH = "./emotion_synthesizer/learned_generators/gaus_2d/1800000-G
 DEFAULT_MODEL_TYPE = "gaussian"
 
 
-def make_meme(original_image, new_emotion, text=None, wandb_artifact=None):
+def make_meme(original_image, new_emotion, secondary_emotion=None, intensity=None, text=None, wandb_artifact=None):
+    # workaround for gradio bug (!?)
+    secondary_emotion = None if (secondary_emotion == "None" or secondary_emotion == "") else secondary_emotion
+    print(f"Secondary emotion: {secondary_emotion}")
+    
     if wandb_artifact:
         artifact_dir = artifact.download()
         artifact_path = f"{artifact_dir}/1800000-G.ckpt"
@@ -21,7 +25,7 @@ def make_meme(original_image, new_emotion, text=None, wandb_artifact=None):
     else:
         model = EmotionSynthesizer(DEFAULT_MODEL_PATH, DEFAULT_MODEL_TYPE)
     try:
-        generated_image = model.predict(original_image, new_emotion)
+        generated_image = model.predict(original_image, new_emotion, secondary_emotion, intensity)
     except:
         raise gr.Error(f"Cannot generate emotion {new_emotion} from the input image.")
     
@@ -71,17 +75,24 @@ if __name__ == "__main__":
             This tool used the pretrained model and is modified based on the [GANmut Model](https://github.com/stefanodapolito/GANmut). 
             You can view the source code of this tool in [GitHub](https://github.com/fsdl2022emotion/meme-manipulation-app) and [Gradio Space](https://huggingface.co/spaces/fsdl2022emotion/meme-manipulation-gradio-space) and give it a star if you like it!<br>
             """)
-
+        with gr.Accordion("Valid Mapping"):
+            gr.Markdown("""
+            You can use purely the primary emotion or combine it with the secondary emotion for image generation. <br>
+            Yet only some of the combinations are valid. Please refer to the below mapping: <br>
+            ![valid mapping](https://i.ibb.co/5rCXgfB/Screenshot-2022-10-14-at-11-59-28-AM.png)
+            """)
         with gr.Tab("Change emotion"):
             with gr.Row():
                 with gr.Column():
                     emtion_image_input = gr.Image()
-                    emotion_text_input = gr.Radio(["happy", "fear", "sad", "angry", "disgust", "surprise", "neutral"], label="Emotion")
+                    emotion_text_input = gr.Radio(["happy", "fear", "sad", "angry", "disgust", "surprise", "neutral"], label="Primary Emotion (Required)")
+                    emotion_text_input2 = gr.Radio(["happy", "fear", "sad", "angry", "disgust", "surprise", "neutral"], label="Secondary Emotion (Optional)", value=None)
+                    intensity = gr.Slider(0, 1, label="Intensity")
                     meme_text_input = gr.Textbox(lines=1, label="Meme text")            
                     change_emotion_button = gr.Button("Change emotion")
                 with gr.Row(scale=1):
                     emotion_image_output = gr.Image()
-        change_emotion_button.click(meme_app, inputs=[emtion_image_input, emotion_text_input, meme_text_input], outputs=emotion_image_output, )
+        change_emotion_button.click(meme_app, inputs=[emtion_image_input, emotion_text_input, emotion_text_input2, intensity, meme_text_input], outputs=emotion_image_output, )
         
         ############################# only show on demo day #############################
         with gr.Tab("original-image"):
@@ -93,7 +104,7 @@ if __name__ == "__main__":
         ##################################################################################
 
         gr.Examples(examples=[
-            ["examples/Charles Frye.jpeg", "surprise", "When I got a new idea"], 
+            ["examples/charles-frye.jpeg", "surprise", "When I got a new idea"], 
             ["examples/sergey.jpg", "neutral", "I did smile"],
             ["examples/josh.jpg", "angry", "nasdaq index"],
             ], 
@@ -102,4 +113,4 @@ if __name__ == "__main__":
             )
         
 
-    demo.launch(favicon_path="favicon.png")
+    demo.launch(favicon_path="./assets/favicon.png")
