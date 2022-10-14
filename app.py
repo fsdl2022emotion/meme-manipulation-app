@@ -81,8 +81,8 @@ if __name__ == "__main__":
                     emtion_image_input = gr.Image()
                     emotion_text_input = gr.Radio(["happy", "fear", "sad", "angry", "disgust", "surprise", "neutral"], label="Primary Emotion (Required)")
                     emotion_text_input2 = gr.Radio(["happy", "fear", "sad", "angry", "disgust", "surprise", "neutral"], label="Secondary Emotion (Optional)", value=None)
-                    intensity = gr.Slider(0, 1, label="Intensity")
-                    meme_text_input = gr.Textbox(lines=1, label="Meme text")            
+                    intensity = gr.Slider(0, 1, label="Intensity (Valid only if secondary emotion is selected)")
+                    meme_text_input = gr.Textbox(lines=1, label="Meme text (Optional)")            
                     change_emotion_button = gr.Button("Change emotion")
                 with gr.Row(scale=1):
                     emotion_image_output = gr.Image()
